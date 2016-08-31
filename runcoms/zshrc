@@ -1,9 +1,20 @@
+#!/usr/local/bin/zsh
 #
 # Executes commands at the start of an interactive session.
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Stephen Johnson <stevej@ucla.edu>
 #
+
+SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
+if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "$(date): sourcing $SCRIPT_NAME..."; fi
+
+
+# Load bash profiles
+if [ -f ~/.bash_profile ] && [ -r ~/.bash_profile ]; then source ~/.bash_profile; fi
+
+
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
@@ -11,3 +22,46 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+
+
+# Override settings from zprezto
+unsetopt correct
+unsetopt noclobber
+export LESS='-g -i -M -R -S -w -z-4'
+
+# History file overrides
+export HISTFILE=~/.zsh_history
+export HISTSIZE=40000
+export SAVEHIST=40000
+if [[ $HISTFILESIZE -gt $HISTSIZE ]]; then
+    export SAVEHIST=$HISTFILESIZE
+    export HISTSIZE=$HISTFILESIZE
+fi
+
+
+
+
+# ssh
+export SSH_KEY_PATH="~/.ssh/id_rsa"
+
+# Enable online help
+unalias run-help
+autoload run-help
+HELPDIR=/usr/local/share/zsh/help
+
+
+
+
+
+
+
+
+# Turn off startup profiling
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi
+
+SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
+if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "$(date): done sourcing $SCRIPT_NAME..."; fi

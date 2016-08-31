@@ -1,11 +1,38 @@
+#!/usr/local/bin/zsh
 #
 # Defines environment variables.
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Stephen Johnson <stevej@ucla.edu>
 #
+
+
+# Initialize startup profiling
+[[ -n $DEBUG || -a .DEBUG ]] && PROFILE_STARTUP=true
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+    PS4=$'%D{%M%S%.} %N:%i> '
+    mkdir -p $HOME/tmp
+    exec 3>&2 2>$HOME/tmp/zshstartlog.$$
+    setopt xtrace prompt_subst
+fi
+
+#
+# .zshenv
+#
+# Launched on login with an interactive zsh shell 
+#
+SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshenv/' | xargs basename)
+if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "$(date): sourcing $SCRIPT_NAME..."; fi
+
+
 
 # Ensure that a non-login, non-interactive shell has a defined environment.
 if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
+
+
+
+if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "$(date): done sourcing $SCRIPT_NAME..."; fi
