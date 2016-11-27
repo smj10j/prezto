@@ -50,12 +50,32 @@ unalias run-help
 autoload run-help
 HELPDIR=/usr/local/share/zsh/help
 
+# Test if iTerm2 shell integration is enabled
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 
+### Init rbenv
+#if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "rbenv: $(which rbenv)"; fi
+export RBENV_ROOT=/usr/local/var/rbenv
+eval "$(rbenv init -)" 
+
+### Init perlbrew
+# eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+source ~/perl5/perlbrew/etc/bashrc
+
+# Alias for working with plex and Deluge torrent downloader
+alias pms='/Applications/Plex\ Media\ Server.app/Contents/MacOS/Plex\ Media\ Scanner'
 
 
+# GOPATH for 'go get' 
+# https://golang.org/doc/code.html#GOPATH
+export GOPATH="$HOME/.gopath"
+export PATH="$PATH:$GOPATH/bin"
 
 
+########################################################################
+######### Don't modify this section or place anything after it #########
+########################################################################
 
 # Turn off startup profiling
 if [[ "$PROFILE_STARTUP" == true ]]; then
@@ -65,3 +85,6 @@ fi
 
 SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
 if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "$(date): done sourcing $SCRIPT_NAME..."; fi
+
+########################################################################
+########################################################################
