@@ -21,6 +21,18 @@ zstyle ':prezto:*:*' color 'yes'
 # Set the Zsh functions to load (man zshcontrib).
 # zstyle ':prezto:load' zfunction 'zargs' 'zmv'
 
+
+
+#
+# GNU Utility
+#
+
+# Set the command prefix on non-GNU systems.
+zstyle ':prezto:module:gnu-utility' prefix 'g'
+
+
+
+
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
@@ -29,11 +41,11 @@ zstyle ':prezto:load' pmodule \
   'history' \
   'directory' \
   'spectrum' \
+  'gnu-utility' \
   'utility' \
   'completion' \
   'prompt' \
-  'osx' \
-  ''
+  'osx'
 #   'terminal' \
 #   'git' \
 
@@ -65,17 +77,10 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Ignore submodules when they are 'dirty', 'untracked', 'all', or 'none'.
 # zstyle ':prezto:module:git:status:ignore' submodules 'all'
 
-#
-# GNU Utility
-#
-
-# Set the command prefix on non-GNU systems.
-# zstyle ':prezto:module:gnu-utility' prefix 'g'
-
 
 # Don't use the shell built-in for the following commands
-alias which='command which'
-alias time='command time';
+# alias which='command which'
+# alias time='command time';
 
 
 #
@@ -176,5 +181,3 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 
 # Integrate with iTerm2.
 # zstyle ':prezto:module:tmux:iterm' integrate 'yes'
-
-

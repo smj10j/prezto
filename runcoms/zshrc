@@ -7,8 +7,11 @@
 #   Stephen Johnson <stevej@ucla.edu>
 #
 
+THEN=$NOW
+NOW=$($(command which -s gdate) && gdate +%s.%N || $(which date) +%s)
+DIFF=$(printf '%4.2f' $(echo "($NOW-$THEN)*1000" | bc))
 SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
-if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "$(date): sourcing $SCRIPT_NAME..."; fi
+if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "${NOW} (+${DIFF}): sourcing $SCRIPT_NAME..."; fi
 
 
 # Load bash profiles
@@ -24,6 +27,7 @@ fi
 # Customize to your needs...
 
 
+export ANDROID_HOME=/usr/local/opt/android-sdk
 
 # Override settings from zprezto
 unsetopt correct
@@ -57,34 +61,41 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 ### Init rbenv
 #if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "rbenv: $(which rbenv)"; fi
 export RBENV_ROOT=/usr/local/var/rbenv
-eval "$(rbenv init -)" 
+eval "$(rbenv init -)"
 
 ### Init perlbrew
 # eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
-source ~/perl5/perlbrew/etc/bashrc
+# source ~/perl5/perlbrew/etc/bashrc
 
 # Alias for working with plex and Deluge torrent downloader
 alias pms='/Applications/Plex\ Media\ Server.app/Contents/MacOS/Plex\ Media\ Scanner'
 
 
-# GOPATH for 'go get' 
+# GOPATH for 'go get'
 # https://golang.org/doc/code.html#GOPATH
 export GOPATH="$HOME/.gopath"
 export PATH="$PATH:$GOPATH/bin"
+
+export ANDROID_HOME=/usr/local/opt/android-sdk
+# added $ANDROID_HOME/bin to $PATH in to /etc/paths.d/35-AndroidSDK
 
 
 ########################################################################
 ######### Don't modify this section or place anything after it #########
 ########################################################################
 
+THEN=$NOW
+NOW=$($(command which -s gdate) && gdate +%s.%N || $(which date) +%s)
+DIFF=$(printf '%4.2f' $(echo "($NOW-$THEN)*1000" | bc))
+SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
+if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "${NOW} (+${DIFF}): done sourcing $SCRIPT_NAME..."; fi
+
+
 # Turn off startup profiling
 if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
-
-SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshrc/' | xargs basename)
-if [ "$DEBUG" != "" ] || [ -f .DEBUG ]; then echo "$(date): done sourcing $SCRIPT_NAME..."; fi
 
 ########################################################################
 ########################################################################

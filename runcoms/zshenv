@@ -21,10 +21,11 @@ fi
 #
 # .zshenv
 #
-# Launched on login with an interactive zsh shell 
+# Launched on login with an interactive zsh shell
 #
+NOW=$($(command which -s gdate) && gdate +%s.%N || $(which date) +%s)
 SCRIPT_NAME=$(echo "$0" | sed 's/^-\(.*\)/shell-\1" ".zshenv/' | xargs basename)
-if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "$(date): sourcing $SCRIPT_NAME..."; fi
+if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "${NOW}: sourcing $SCRIPT_NAME..."; fi
 
 
 
@@ -34,5 +35,7 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
 fi
 
 
-
-if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "$(date): done sourcing $SCRIPT_NAME..."; fi
+THEN=$NOW
+NOW=$($(command which -s gdate) && gdate +%s.%N || $(which date) +%s)
+DIFF=$(printf '%4.2f' $(echo "($NOW-$THEN)*1000" | bc))
+if [ "$DEBUG" != "" -o -f .DEBUG ]; then echo "${NOW} (+${DIFF}): done sourcing $SCRIPT_NAME..."; fi
